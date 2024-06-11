@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_App.Pages.Signup"
+             BackgroundColor="#92cace">
+
+    <ScrollView>
+        
+        <VerticalStackLayout Padding="30,0"
+                             Spacing="15"
+                             HorizontalOptions="Center" 
+                             VerticalOptions="Center"
+                             WidthRequest="400">
+
+            <!--TITLE-->
+            <Label Text="SIGNUP"
+                   TextColor="#2d464c"
+                   FontSize="50"
+                   HorizontalOptions="Center"
+                   Margin="20"/>
+
+            <!--ACCOUNT-->
+            <Label Text="Account" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="Account"
+                   Placeholder="User account"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--NAME-->
+            <Label Text="Name" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="Name"
+                   Placeholder="User name"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--LASTNAME-->
+            <Label Text="Last name" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="LastName"
+                   Placeholder="User last name"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--PASSWORD-->
+            <Label Text="Password" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="Password" 
+                   IsPassword="True"
+                   Placeholder="*****"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--REPEAT PASSWORD-->
+            <Label Text="Repeat Password" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="RepeatPassword" 
+                   IsPassword="True"
+                   Placeholder="*****"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--IMAGE-->
+            <HorizontalStackLayout>
+                <Label Text="Do you want to use a photo?"
+                       TextColor="#325158"
+                       VerticalOptions="Center"/>
+                <CheckBox IsChecked="False" 
+                          Color="#1b8d9f" 
+                          CheckedChanged="OnChecked" 
+                          VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <VerticalStackLayout x:Name="PhotoInput" IsVisible="False">
+                <Button x:Name="ImageButton" BorderWidth="2" BorderColor="Transparent" Text="Select Image" Clicked="OnPickFileClicked" BackgroundColor="#1b8d9f"/>
+                <Image x:Name="SelectedImage" 
+                       WidthRequest="300" 
+                       HeightRequest="300" 
+                       Aspect="AspectFit"/>
+            </VerticalStackLayout>
+
+            <!--ERROR MESSAGGE-->
+            <Label x:Name="ErrorMessage" 
+                   Text="" 
+                   TextColor="Red"
+                   HorizontalOptions="Center"
+                   />
+
+            <!--BUTTON-->
+            <Button Text="Signup" 
+                    Clicked="SignUp"
+                    BackgroundColor="Transparent"
+                    TextColor="#3b757f"
+                    BorderColor="#3b757f"
+                    BorderWidth="3"
+                    />
+
+            <!--TO SIGNUP-->
+            <HorizontalStackLayout HorizontalOptions="Center">
+
+                <Label Text="You already have an account?"
+                       TextColor="White"
+                       VerticalOptions="Center"/>
+                <Button Text="Log In"
+                        TextColor="#438e96"
+                        BackgroundColor="Transparent"
+                        BorderColor="Transparent"
+                        VerticalOptions="Center"
+                        Clicked="ToLogin"/>
+
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    
+    </ScrollView>
+    
+</ContentPage>

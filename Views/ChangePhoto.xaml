@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="Chat_App.Views.ChangePhoto"
+               Color="Transparent"
+               CanBeDismissedByTappingOutsideOfPopup="False">
+
+    <Frame WidthRequest="350" HeightRequest="350" CornerRadius="25" BackgroundColor="#5faab1">
+        <ScrollView>
+            
+            <VerticalStackLayout HorizontalOptions="Center">
+                <!--IMAGE-->
+                <Button x:Name="ImageButton" BorderWidth="2" BorderColor="Transparent" Text="Select Image" Clicked="OnPickFileClicked" BackgroundColor="#1b8d9f"/>
+                <Image x:Name="SelectedImage" 
+                       WidthRequest="200" 
+                       HeightRequest="200" 
+                       Aspect="AspectFit"/>
+                
+                <!--BUTTONS-->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="5">
+                    <Button Text="Save" TextColor="#f2f9f9" BackgroundColor="#3b757f" Clicked="Save"/>
+                    <Button Text="Delete" TextColor="#f2f9f9" BackgroundColor="#3b757f" Clicked="Delete"/>
+                    <Button Text="Cancel" TextColor="#f2f9f9" BackgroundColor="#3b757f" Clicked="Cancel"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            
+        </ScrollView>
+    </Frame>
+    
+</toolkit:Popup>

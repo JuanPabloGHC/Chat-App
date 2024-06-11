@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_App.MainPage"
+             BackgroundColor="#92cace">
+    
+    <!--COLORES-->
+    <!--BASE AZUL/VERDE: #438e96-->
+    <!--GRIS: #7e9192-->
+    <!--AQUA: #1cabba-->
+
+    <Grid ColumnDefinitions="400, *"
+          ColumnSpacing="3">
+
+        <!--CONTACTS-->
+        <StackLayout Grid.Column="0" 
+                     BackgroundColor="#ddeff0"
+                     >
+            
+            <!--PROFILE-->
+            <VerticalStackLayout HeightRequest="100"
+                                 BackgroundColor="#bfe0e2"
+                                 >
+                <!--USER-->
+                <Grid ColumnDefinitions="60, *, 50">
+                    <Button x:Name="ProfileButton" 
+                            Grid.Column="0" 
+                            TextColor="#1a2c32"
+                            FontSize="10"
+                            BackgroundColor="#438e96"
+                            BorderColor="#1a2c32"
+                            BorderWidth="2"
+                            CornerRadius="50"
+                            WidthRequest="35"
+                            HeightRequest="35"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Start"
+                            Margin="5, 5 ,0, 0" 
+                            IsVisible="false"
+                            />
+                    <ImageButton x:Name="ProfileImageButton"
+                                 Grid.Column="0" 
+                                 BorderColor="#1a2c32"
+                                 BorderWidth="2"
+                                 CornerRadius="50"
+                                 WidthRequest="35"
+                                 HeightRequest="35"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Start"
+                                 Margin="5, 5 ,0, 0" 
+                                 IsVisible="False"/>
+                    <Label x:Name="UserAccount" 
+                           Grid.Column="1" 
+                           TextColor="#1a2c32"
+                           FontSize="20"
+                           VerticalOptions="Center"
+                           />
+                    <ImageButton Grid.Column="2" 
+                                 Source="trespuntos.png"
+                                 MinimumWidthRequest="0"
+                                 MaximumWidthRequest="20"
+                                 VerticalOptions="Center"
+                                 Clicked="OnMenuClicked"
+                                 />
+                </Grid>
+                <!--FILTER-->
+                <HorizontalStackLayout Margin="5" Spacing="10">
+                    <Entry x:Name="Filter" 
+                           Placeholder="Search..."
+                           BackgroundColor="#f2f9f9"
+                           TextColor="#1a2c32"
+                           WidthRequest="350"
+                           MinimumHeightRequest="0"
+                           MaximumHeightRequest="30"
+                           VerticalOptions="Center"
+                           TextChanged="OnFilterChanged"
+                           />
+                    <ImageButton Source="lupa.png"
+                                 VerticalOptions="Center"
+                                 MinimumWidthRequest="0"
+                                 MaximumWidthRequest="20"/>
+                </HorizontalStackLayout>
+                
+            </VerticalStackLayout>
+            
+            <!--CONTACTS-->
+            <VerticalStackLayout x:Name="ChatsStack" >
+            </VerticalStackLayout>
+
+        </StackLayout>
+
+        <!--LANDING CHAT-->
+        <Grid x:Name="LandingChat"
+              Grid.Column="1"
+              RowDefinitions="*, *, *"
+              Padding="100"
+              BackgroundColor="#bfe0e2"
+              IsVisible="True">
+            <Label Grid.Row="0" 
+                   Text="CHAT APP"
+                   TextColor="#1a2c32"
+                   FontSize="45"
+                   HorizontalOptions="Center"/>
+
+            <Label Grid.Row="1" 
+                   Text="Chat with everyone, make friends, have fun."
+                   TextColor="#325158"
+                   FontSize="20"
+                   HorizontalOptions="Center"/>
+
+            <ImageButton Grid.Row="2" 
+                         Source="chatapp.png"
+                         MinimumWidthRequest="0"
+                         MaximumWidthRequest="500"
+                         HorizontalOptions="Center"
+                         />
+        </Grid>
+        
+        <!--CHAT-->
+        <Grid x:Name="ChatOpen" 
+              Grid.Column="1"
+              RowDefinitions="100, *, 80"
+              BackgroundColor="#ddeff0"
+              IsVisible="False">
+            
+            <!--CONTACT INFO-->
+            <Grid Grid.Row="0"
+                  BackgroundColor="#bfe0e2"
+                  ColumnDefinitions="60, Auto, *, 50"
+                  >
+
+                <Button x:Name="ChatButtonProfile" 
+                        Grid.Column="0"
+                        TextColor="#1a2c32"
+                        FontSize="10"
+                        BorderColor="#1a2c32"
+                        BorderWidth="2"
+                        CornerRadius="50"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"
+                        Margin="5" 
+                        IsVisible="false"
+                        />
+                <ImageButton x:Name="ChatButtonImage" 
+                             Grid.Column="0" 
+                             BorderColor="#1a2c32"
+                             BorderWidth="2"
+                             CornerRadius="50"
+                             WidthRequest="50"
+                             HeightRequest="50"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Start"
+                             Margin="5" 
+                             IsVisible="False"
+                             />
+                <Label x:Name="ChatNameProfile" 
+                       Grid.Column="1" 
+                       TextColor="#1a2c32"
+                       FontSize="20"
+                       VerticalOptions="Center"
+                        />
+                <Frame x:Name="ChatStatusProfile" 
+                       Grid.Column="2" 
+                       BackgroundColor="Green"
+                       BorderColor="Green"
+                       CornerRadius="50"
+                       WidthRequest="10"
+                       HeightRequest="10"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start"
+                       Margin="5, 3, 0, 0"
+                       />
+                <ImageButton Grid.Column="3" 
+                             Source="trespuntos.png"
+                             MinimumWidthRequest="0"
+                             MaximumWidthRequest="20"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Clicked="OnChatOptionsClicked"
+                             />
+            </Grid>
+            <!--CHAT-->
+            <ScrollView x:Name="ChatScrollView" 
+                        Grid.Row="1">
+                <VerticalStackLayout x:Name="ChatMessages"
+                                     Padding="20">
+                    
+                </VerticalStackLayout>
+            </ScrollView>
+            <!--MESSAGE-->
+            <Grid Grid.Row="2" 
+                  ColumnDefinitions="*, 50" 
+                  BackgroundColor="#f2f9f9"
+                  Padding="10,0,0,0">
+                
+                <Entry x:Name="MessageInput" 
+                       Grid.Column="0" 
+                       Placeholder="Message..."
+                       BackgroundColor="#92cace"
+                       TextColor="#1a2c32"
+                       VerticalOptions="Center"
+                       />
+                <ImageButton Grid.Column="1" 
+                             Source="send.png"
+                             MinimumWidthRequest="0"
+                             MaximumWidthRequest="20"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             Clicked="SendMessage"
+                             />
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Chat_App.Pages.Login"
+             BackgroundColor="#92cace">
+
+    <ScrollView>
+        
+        <VerticalStackLayout Padding="30,0"
+                             Spacing="15"
+                             HorizontalOptions="Center" 
+                             VerticalOptions="Center"
+                             WidthRequest="300">
+
+            <!--TITLE-->
+            <Label Text="LOGIN"
+                   TextColor="#2d464c"
+                   FontSize="50"
+                   HorizontalOptions="Center"
+                   Margin="20"/>
+
+            <!--ACCOUNT-->
+            <Label Text="Account" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="Account"
+                   Placeholder="User account"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--PASSWORD-->
+            <Label Text="Password" 
+                   TextColor="#325158"
+                   Margin="0, 20, 0, 0"
+                   />
+            <Entry x:Name="Password" 
+                   IsPassword="True"
+                   Placeholder="*****"
+                   BackgroundColor="#bfe0e2"
+                   TextColor="#2d464c"
+                   />
+
+            <!--ERROR MESSAGGE-->
+            <Label x:Name="ErrorMessage" 
+                   Text="" 
+                   TextColor="Red"
+                   HorizontalOptions="Center"
+                   />
+        
+            <!--BUTTON-->
+            <Button Text="Login" 
+                    Clicked="LogIn"
+                    BackgroundColor="Transparent"
+                    TextColor="#3b757f"
+                    BorderColor="#3b757f"
+                    BorderWidth="3"
+                    />
+
+            <!--TO SIGNUP-->
+            <HorizontalStackLayout HorizontalOptions="Center">
+            
+                <Label Text="Don't have an account?"
+                       TextColor="White"
+                       VerticalOptions="Center"/>
+                <Button Text="Sign Up"
+                        TextColor="#438e96"
+                        BackgroundColor="Transparent"
+                        BorderColor="Transparent"
+                        VerticalOptions="Center"
+                        Clicked="ToSignup"/>
+            
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+        
+    </ScrollView>
+
+</ContentPage>
