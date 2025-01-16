@@ -4,12 +4,18 @@ namespace Chat_App
 {
     public partial class App : Application
     {
+        #region < CONSTRUCTORS >
+
         public App()
         {
             InitializeComponent();
 
             MainPage = new Login();
         }
+
+        #endregion
+
+        #region < PUBLIC METHODS >
 
         public static void Enter(string userAccount)
         {
@@ -25,5 +31,8 @@ namespace Chat_App
         {
             ((App)App.Current).MainPage = new Signup();
         }
+
+        #endregion
+
     }
 }
