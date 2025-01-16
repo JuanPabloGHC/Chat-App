@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Chat_App.Functions
 {
     public static class CheckInputs
     {
+        #region < PUBLIC METHODS >
+
         // Valid inputs?
         public static bool TextInputs(Entry[] inputs)
         {
@@ -37,5 +33,8 @@ namespace Chat_App.Functions
 
             return true;
         }
+
+        #endregion
+
     }
 }

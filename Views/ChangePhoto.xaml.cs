@@ -6,13 +6,21 @@ namespace Chat_App.Views;
 
 public partial class ChangePhoto : Popup
 {
+    #region < DATA MEMBERS >
+
     User _user;
+
     public MemoryStream? _Mstream;
+
     private UserRepository userRepository;
 
+    #endregion
+
+    #region < CONSTRUCTORS >
+
     public ChangePhoto(User u)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         userRepository = UserRepository.GetInstance();
 
@@ -20,9 +28,13 @@ public partial class ChangePhoto : Popup
         if (u.Photo != null)
         {
             _Mstream = new MemoryStream(u.Photo);
-            SelectedImage.Source =ImageSource.FromStream(() => _Mstream);
+            SelectedImage.Source = ImageSource.FromStream(() => _Mstream);
         }
-	}
+    }
+
+    #endregion
+
+    #region < UI EVENTS >
 
     private async void OnPickFileClicked(object sender, EventArgs e)
     {
@@ -80,5 +92,7 @@ public partial class ChangePhoto : Popup
     {
         Close();
     }
+
+    #endregion
 
 }

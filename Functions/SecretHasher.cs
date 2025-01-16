@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Chat_App.Functions
 {
     public static class SecretHasher
     {
+        #region < DATA MEMBERS >
+
         private const int _saltSize = 16; // 128 bits
         private const int _keySize = 32; //245 bits
         private const int _iterations = 50000;
@@ -17,6 +13,10 @@ namespace Chat_App.Functions
         private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA256;
 
         private const char segmentDelimiter = ':';
+
+        #endregion
+
+        #region < PUBLIC METHODS >
 
         // Encrypt the password
         public static string Hash(string input)
@@ -56,6 +56,8 @@ namespace Chat_App.Functions
 
             return CryptographicOperations.FixedTimeEquals(inputHash, hash);
         }
+
+        #endregion
 
     }
 }

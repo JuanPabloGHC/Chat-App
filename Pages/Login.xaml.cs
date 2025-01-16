@@ -5,16 +5,26 @@ namespace Chat_App.Pages;
 
 public partial class Login : ContentPage
 {
+    #region < DATA MEMBERS >
+
     UserRepository userRepository;
 
-	public Login()
+    #endregion
+
+    #region < CONSTRUCTORS >
+
+    public Login()
 	{
 		InitializeComponent();
 
         this.userRepository = UserRepository.GetInstance();
 	}
 
-	private async void LogIn(object sender, EventArgs e)
+    #endregion
+
+    #region < UI EVENTS >
+
+    private async void LogIn(object sender, EventArgs e)
 	{
         ErrorMessage.Text = "";
 
@@ -43,5 +53,7 @@ public partial class Login : ContentPage
 	{
 		App.ToSignUp();
 	}
+
+    #endregion
 
 }

@@ -8,6 +8,8 @@ namespace Chat_App
 {
     public partial class MainPage : ContentPage
     {
+        #region < DATA MEMBERS >
+
         // Me
         private User? _user;
 
@@ -22,6 +24,10 @@ namespace Chat_App
         private MessageRepository messageRepository;
         private ChatRepository chatRepository;
 
+        #endregion
+
+        #region < CONSTRUCTORS >
+
         public MainPage(string userAccount)
         {
             InitializeComponent();
@@ -35,6 +41,169 @@ namespace Chat_App
             this.InitializeUser(userAccount);
 
         }
+
+        #endregion
+
+        #region < UI EVENTS >
+
+        private async void OnMenuClicked(object sender, EventArgs e)
+        {
+            var action = await DisplayActionSheet("Menu", "Cancel", null, "Exit", "Change photo");
+
+            switch (action)
+            {
+                case "Exit":
+                    // Logout
+                    await userRepository.ModifyStatus(_user.Id, false);
+
+                    App.Exit();
+
+                    break;
+                case "Change photo":
+                    var popup = new ChangePhoto(_user);
+
+                    await this.ShowPopupAsync(popup);
+
+                    await RefreshProfile();
+
+                    break;
+            }
+        }
+
+        private async void OnFilterChanged(object sender, TextChangedEventArgs e)
+        {
+
+            await LoadPage(Filter.Text);
+        }
+
+        private async void OnChatSelected(object? sender, EventArgs e)
+        {
+            // Photo / button of user is selected
+            int id = -1;
+            ImageButton b = sender as ImageButton;
+
+            if (b == null)
+            {
+                Button b2 = sender as Button;
+                id = Convert.ToInt32(b2.AutomationId);
+            }
+            else
+            {
+                id = Convert.ToInt32(b.AutomationId);
+            }
+
+            // Get user data
+            User? u = await userRepository.GetUser(id);
+
+            // Update the current the friend chat
+            idUserChat = u.Id;
+
+            if (u != null)
+            {
+                // Photo?
+                if (u.Photo != null)
+                {
+                    ChatButtonProfile.IsVisible = false;
+                    ChatButtonImage.IsVisible = true;
+                    MemoryStream s = new MemoryStream(u.Photo);
+                    ChatButtonImage.Source = ImageSource.FromStream(() => s);
+                }
+                else
+                {
+                    ChatButtonImage.IsVisible = false;
+                    ChatButtonProfile.IsVisible = true;
+                    ChatButtonProfile.BackgroundColor = Color.FromArgb(u.Color);
+                    ChatButtonProfile.Text = string.Concat(u?.Name?[0], u?.LastName?[0]);
+                }
+
+                // Friend name
+                ChatNameProfile.Text = string.Concat(u?.Name, " ", u?.LastName);
+
+                // Friend status
+                ChatStatusProfile.BackgroundColor = u.Status ? Colors.Green : Colors.Gray;
+                ChatStatusProfile.BorderColor = u.Status ? Colors.Green : Colors.Gray;
+
+                // Update screen
+                LandingChat.IsVisible = false;
+                ChatOpen.IsVisible = true;
+            }
+            await SeenMessage();
+            await LoadPage("");
+        }
+
+        private async void SendMessage(object sender, EventArgs e)
+        {
+            // Valid message?
+            if (!CheckInputs.TextInputs([MessageInput]))
+            {
+                return;
+            }
+
+            // Get chat data
+            int idChat;
+            Chat? chatEx = await chatRepository.GetChat(_user.Id, idUserChat);
+
+            // New chat
+            if (chatEx == null)
+            {
+                Chat _chat = await chatRepository.Create(_user.Id, idUserChat);
+
+                idChat = _chat.Id;
+            }
+            // Update the chat
+            else
+            {
+                idChat = chatEx.Id;
+                await chatRepository.ModifyStatus(chatEx.Id, _user.Id);
+
+                //if (chatEx.User1Id == _user.Id)
+                //{
+                //    chatEx.Seen1 = true;
+                //    chatEx.Seen2 = false;
+                //}
+                //else
+                //{
+                //    chatEx.Seen2 = true;
+                //    chatEx.Seen1 = false;
+                //}
+            }
+            // Create the new message
+            await messageRepository.Create(_user.Id, idChat, MessageInput.Text, DateTime.Now, false);
+
+            MessageInput.Text = "";
+
+            await LoadPage("");
+
+        }
+
+        private async void OnChatOptionsClicked(object sender, EventArgs e)
+        {
+            var action = await DisplayActionSheet("Options", "Cancel", null, "Delete chat", "Close chat");
+
+            switch (action)
+            {
+                case "Delete chat":
+                    await chatRepository.Delete(_user.Id, idUserChat);
+
+                    await LoadPage("");
+
+                    break;
+                case "Close chat":
+                    idUserChat = -1;
+
+                    ChatOpen.IsVisible = false;
+
+                    LandingChat.IsVisible = true;
+
+                    await LoadPage("");
+
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region < PRIVATE METHODS >
 
         private async Task InitializeUser(string userAccount)
         {
@@ -353,145 +522,6 @@ namespace Chat_App
             ScrollToBottom();
         }
 
-        public async Task LoadPage(string filter)
-        {
-
-            await RefreshContacts(filter);
-
-            await RefreshChat();
-
-        }
-
-        private async void OnMenuClicked(object sender, EventArgs e)
-        {
-            var action = await DisplayActionSheet("Menu", "Cancel", null, "Exit", "Change photo");
-
-            switch (action)
-            {
-                case "Exit":
-                    // Logout
-                    await userRepository.ModifyStatus(_user.Id, false);
-                    
-                    App.Exit();
-
-                    break;
-                case "Change photo":
-                    var popup = new ChangePhoto(_user);
-
-                    await this.ShowPopupAsync(popup);
-
-                    await RefreshProfile();
-
-                    break;
-            }
-        }
-
-        private async void OnFilterChanged(object sender, TextChangedEventArgs e)
-        {
-
-            await LoadPage(Filter.Text);
-        }
-
-        private async void OnChatSelected(object? sender, EventArgs e)
-        {
-            // Photo / button of user is selected
-            int id = -1;
-            ImageButton b = sender as ImageButton;
-
-            if (b == null)
-            {
-                Button b2 = sender as Button;
-                id = Convert.ToInt32(b2.AutomationId);
-            }
-            else
-            {
-                id = Convert.ToInt32(b.AutomationId);
-            }
-
-            // Get user data
-            User? u = await userRepository.GetUser(id);
-
-            // Update the current the friend chat
-            idUserChat = u.Id;
-
-            if (u != null)
-            {
-                // Photo?
-                if (u.Photo != null)
-                {
-                    ChatButtonProfile.IsVisible = false;
-                    ChatButtonImage.IsVisible = true;
-                    MemoryStream s = new MemoryStream(u.Photo);
-                    ChatButtonImage.Source = ImageSource.FromStream(() => s);
-                }
-                else
-                {
-                    ChatButtonImage.IsVisible = false;
-                    ChatButtonProfile.IsVisible = true;
-                    ChatButtonProfile.BackgroundColor = Color.FromArgb(u.Color);
-                    ChatButtonProfile.Text = string.Concat(u?.Name?[0], u?.LastName?[0]);
-                }
-
-                // Friend name
-                ChatNameProfile.Text = string.Concat(u?.Name, " ", u?.LastName);
-
-                // Friend status
-                ChatStatusProfile.BackgroundColor = u.Status ? Colors.Green : Colors.Gray;
-                ChatStatusProfile.BorderColor = u.Status ? Colors.Green : Colors.Gray;
-
-                // Update screen
-                LandingChat.IsVisible = false;
-                ChatOpen.IsVisible = true;
-            }
-            await SeenMessage();
-            await LoadPage("");
-        }
-
-        private async void SendMessage(object sender, EventArgs e)
-        {
-            // Valid message?
-            if (!CheckInputs.TextInputs([MessageInput]))
-            {
-                return;
-            }
-
-            // Get chat data
-            int idChat;
-            Chat? chatEx = await chatRepository.GetChat(_user.Id, idUserChat);
-                
-            // New chat
-            if ( chatEx == null)
-            {
-                Chat _chat = await chatRepository.Create(_user.Id, idUserChat);
-
-                idChat = _chat.Id;
-            }
-            // Update the chat
-            else
-            {
-                idChat = chatEx.Id;
-                await chatRepository.ModifyStatus(chatEx.Id, _user.Id);
-
-                //if (chatEx.User1Id == _user.Id)
-                //{
-                //    chatEx.Seen1 = true;
-                //    chatEx.Seen2 = false;
-                //}
-                //else
-                //{
-                //    chatEx.Seen2 = true;
-                //    chatEx.Seen1 = false;
-                //}
-            }
-            // Create the new message
-            await messageRepository.Create(_user.Id, idChat, MessageInput.Text, DateTime.Now, false);
-
-            MessageInput.Text = "";
-                
-            await LoadPage("");
-
-        }
-
         private async Task SeenMessage()
         {
             // Get chat data
@@ -520,30 +550,22 @@ namespace Chat_App
             await ChatScrollView.ScrollToAsync(0, ChatMessages.Height, true);
         }
 
-        private async void OnChatOptionsClicked(object sender, EventArgs e)
+        #endregion
+
+        #region < PUBLIC METHODS >
+
+        public async Task LoadPage(string filter)
         {
-            var action = await DisplayActionSheet("Options", "Cancel", null, "Delete chat", "Close chat");
 
-            switch (action)
-            {
-                case "Delete chat":
-                    await chatRepository.Delete(_user.Id, idUserChat);
+            await RefreshContacts(filter);
 
-                    await LoadPage("");
+            await RefreshChat();
 
-                    break;
-                case "Close chat":
-                    idUserChat = -1;
-
-                    ChatOpen.IsVisible = false;
-
-                    LandingChat.IsVisible = true;
-
-                    await LoadPage("");
-
-                    break;
-            }
         }
+
+
+        #endregion
+
     }
 
 }

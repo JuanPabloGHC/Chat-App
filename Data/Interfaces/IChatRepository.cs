@@ -4,8 +4,8 @@ namespace Chat_App.Data.Interfaces
 {
     public interface IChatRepository
     {
+        #region < PUBLIC METHODS >
         public Task<Chat?> GetChat(int user1ID, int user2ID);
-
         public Task<Chat?> GetChat(int chatID);
 
         public Task<Message?> GetLastMessage(int user1ID, int user2ID);
@@ -17,6 +17,8 @@ namespace Chat_App.Data.Interfaces
         public Task SeenChat(int chatID, int userID);
         
         public Task Delete(int user1ID, int user2ID);
+
+        #endregion
 
     }
 }

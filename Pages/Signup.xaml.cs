@@ -7,6 +7,8 @@ namespace Chat_App.Pages;
 
 public partial class Signup : ContentPage
 {
+    #region < DATA MEMBERS >
+
     // Photo
     public MemoryStream? _Mstream;
     private bool withPhoto = false;
@@ -17,12 +19,21 @@ public partial class Signup : ContentPage
 
     private UserRepository userRepository;
 
+    #endregion
+
+    #region < CONSTRUCTORS >
+
     public Signup()
 	{
 		InitializeComponent();
 
         this.userRepository = UserRepository.GetInstance();
 	}
+
+    #endregion
+
+    #region < UI EVENTS >
+
     private async void OnPickFileClicked(object sender, EventArgs e)
     {
         try
@@ -126,5 +137,7 @@ public partial class Signup : ContentPage
     {
         App.Exit();
     }
+
+    #endregion
 
 }

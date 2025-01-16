@@ -4,6 +4,8 @@ namespace Chat_App.Data.Interfaces
 {
     public interface IUserRepository
     {
+        #region < PUBLIC METHODS >
+
         public Task<List<User>> GetAll(string account, string filter = "");
         
         public Task<User?> GetUser(string account);
@@ -17,6 +19,8 @@ namespace Chat_App.Data.Interfaces
         public Task ModifyPhoto(int userID, byte[]? photo);
 
         public Task<Boolean> Login(string account, string password);
+
+        #endregion
 
     }
 }
