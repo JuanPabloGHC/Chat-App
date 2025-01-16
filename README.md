@@ -190,6 +190,14 @@ class Context : DbContext {
    │   │  ├──📄Chat.cs
    │   │  │──📄Message.cs
    │   │  └──📄User.cs
+   │   ├──📁/Interfaces
+   │   │  ├──📄IChatRepository.cs
+   │   │  │──📄IMessageRepository.cs
+   │   │  └──📄IUserRepository.cs
+   │   ├──📁/Repository
+   │   │  ├──📄ChatRepository.cs
+   │   │  │──📄MessageRepository.cs
+   │   │  └──📄UserRepository.cs
    │   └──📄Context.cs
    │
    ├──📁/Functions
@@ -213,7 +221,9 @@ class Context : DbContext {
    └──📄MauiProgram.cs
 ```
 
-* Folder Data: Save the structures of the tables and the connection to the database.
+* Folder Data/Entities: Save the structures of the tables and the connection to the database.
+* Folder Data/Interfaces: Define the interface of the Repository Design Pattern.
+* Folder Data/Repository: Manage the data in the data base of each entity. 
 * Folder Functions: General functions that are used in many parts of the project like the validation of inputs.
 * Folder Pages: Auth pages: Login and Signup.
 * Folder Views: To create the Popups views.
