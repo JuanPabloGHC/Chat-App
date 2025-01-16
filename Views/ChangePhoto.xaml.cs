@@ -1,7 +1,6 @@
-using Chat_App.Data;
 using Chat_App.Data.Entities;
+using Chat_App.Data.Repository;
 using CommunityToolkit.Maui.Views;
-using System.IO;
 
 namespace Chat_App.Views;
 
@@ -9,10 +8,13 @@ public partial class ChangePhoto : Popup
 {
     User _user;
     public MemoryStream? _Mstream;
+    private UserRepository userRepository;
 
     public ChangePhoto(User u)
 	{
 		InitializeComponent();
+
+        userRepository = UserRepository.GetInstance();
 
         _user = u;
         if (u.Photo != null)
@@ -58,36 +60,25 @@ public partial class ChangePhoto : Popup
         }
     }
 
-    private void Save(object sender, EventArgs e)
+    private async void Save(object sender, EventArgs e)
     {
         // Update user data
-        using (var db = new Context())
-        {
-            var u = db.Users
-                .Where(u => u.Id == _user.Id)
-                .First();
+        // Photo ?
+        byte[]? photo = SelectedImage.Source != null ? _Mstream?.ToArray() : null;
 
-            // Photo ?
-            if (SelectedImage.Source != null)
-            {
-                u.Photo = _Mstream.ToArray();
-            }
-            else
-            {
-                u.Photo = null;
-            }
-
-            db.SaveChanges();
-        }
+        await userRepository.ModifyPhoto(_user.Id, photo);
 
         Close();
     }
+    
     private void Delete(object sender, EventArgs e)
     {
         SelectedImage.Source = null;
     }
+
     private void Cancel(object sender, EventArgs e)
     {
         Close();
     }
+
 }

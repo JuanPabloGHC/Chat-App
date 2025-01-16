@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat_App.Data.Entities
 {
     [Table("Users")]
     public class User
     {
+        #region < PROPERTIES >
+
         [Key]
         public int Id { get; set; }
 
@@ -27,6 +24,24 @@ namespace Chat_App.Data.Entities
         public byte[]? Photo { get; set; }
 
         public string? Color { get; set; }
+
+        #endregion
+
+        #region < CONSTRUCTORS >
+
+        public User() { }
+
+        public User(string? name, string? lastName, string? account, string? password, byte[]? photo, string? color)
+        {
+            this.Name = name;
+            this.LastName = lastName;
+            this.Account = account;
+            this.Password = password;
+            this.Photo = photo;
+            this.Color = color;
+        }
+
+        #endregion
 
     }
 }

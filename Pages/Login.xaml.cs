@@ -1,16 +1,20 @@
-using Chat_App.Data;
 using Chat_App.Functions;
+using Chat_App.Data.Repository;
 
 namespace Chat_App.Pages;
 
 public partial class Login : ContentPage
 {
+    UserRepository userRepository;
+
 	public Login()
 	{
 		InitializeComponent();
+
+        this.userRepository = UserRepository.GetInstance();
 	}
 
-	private void LogIn(object sender, EventArgs e)
+	private async void LogIn(object sender, EventArgs e)
 	{
         ErrorMessage.Text = "";
 
@@ -22,28 +26,17 @@ public partial class Login : ContentPage
             return;
         }
 
-        using(var db = new Context())
+        // Verify encrypted password
+        bool log = await userRepository.Login(Account.Text, Password.Text);
+
+        if(log)
         {
-            // Get user data
-            var _user = db.Users
-                .Where(u => u.Account == Account.Text)
-                .FirstOrDefault();
-
-            if (_user != null)
-            {
-                // Verify encrypted password
-                if(SecretHasher.Verify(Password.Text, _user.Password))
-                {
-                    _user.Status = true;
-                    db.SaveChanges();
-
-                    App.Enter(Account.Text);
-                }
-            }
-
+            App.Enter(Account.Text);
+        }
+        else
+        {
             ErrorMessage.Text = "NOT FOUND";
         }
-
 	}
 
 	private void ToSignup(object sender, EventArgs e)

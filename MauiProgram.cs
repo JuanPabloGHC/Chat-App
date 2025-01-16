@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Chat_App.Data;
+﻿using Chat_App.Data;
 using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace Chat_App
 {

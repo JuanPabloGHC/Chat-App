@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chat_App.Data.Entities
 {
     [Table("Messages")]
     public class Message
     {
+        #region < PROPERTIES >
+
         [Key]
         public int Id { get; set; }
 
@@ -27,5 +24,23 @@ namespace Chat_App.Data.Entities
         public DateTime? Date { get; set; }
 
         public bool Status { get; set; }
+
+        #endregion
+
+        #region < CONSTRUCTORS >
+
+        public Message() { }
+
+        public Message(int userID, int chatID, string? text, DateTime? date, bool status)
+        {
+            this.UserId = userID;
+            this.ChatId = chatID;
+            this.Text = text;
+            this.Date = date;
+            this.Status = status;
+        }
+
+        #endregion
+
     }
 }

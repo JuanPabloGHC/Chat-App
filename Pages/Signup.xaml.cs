@@ -1,8 +1,7 @@
 
-using Chat_App.Data;
-using Chat_App.Data.Entities;
 using Chat_App.Functions;
-using System.Diagnostics;
+using Chat_App.Data.Entities;
+using Chat_App.Data.Repository;
 
 namespace Chat_App.Pages;
 
@@ -15,9 +14,14 @@ public partial class Signup : ContentPage
     private string[] colors = { "#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#00ffff", "#ffff00" };
 
     private string? userAccount;
+
+    private UserRepository userRepository;
+
     public Signup()
 	{
 		InitializeComponent();
+
+        this.userRepository = UserRepository.GetInstance();
 	}
     private async void OnPickFileClicked(object sender, EventArgs e)
     {
@@ -70,7 +74,7 @@ public partial class Signup : ContentPage
 		}
 	}
 
-	private void SignUp(object sender, EventArgs e)
+	private async void SignUp(object sender, EventArgs e)
 	{
         ErrorMessage.Text = "";
 
@@ -96,51 +100,26 @@ public partial class Signup : ContentPage
             return;
         }
 
-        using (var db = new Context())
+        User? u = await userRepository.GetUser(Account.Text);
+            
+        // This account already exists
+        if ( u != null )
         {
-            var u = db.Users
-                .Where(u => u.Account == Account.Text)
-                .FirstOrDefault();
-
-            // This account already exists
-            if ( u != null )
-            {
-                ErrorMessage.Text = "Try another account";
-                return;
-            }
-
-            // Create a new user
-            var random  = new Random();
-            int index = random.Next(colors.Length);
-            userAccount = Account.Text;
-
-            // Encrypt the password
-            string passCryp = SecretHasher.Hash(Password.Text);
-
-            // Create a new user
-            User user = new User();
-            user.Name = Name.Text;
-            user.LastName = LastName.Text;
-            user.Account = Account.Text;
-            user.Password = passCryp;
-            user.Status = true;
-            if( withPhoto )
-            {
-                user.Photo = _Mstream?.ToArray();
-            }
-            else
-            {
-                user.Photo = null;
-            }
-            user.Color = colors[index];
-
-            // Save user
-            db.Add(user);
-            db.SaveChanges();
+            ErrorMessage.Text = "Try another account";
+            return;
         }
 
+        // Create a new user
+        var random  = new Random();
+
+        int index = random.Next(colors.Length);
+
+        byte[]? photo = withPhoto ? _Mstream?.ToArray() : null;
+
+        User user = await userRepository.Create(Name.Text, LastName.Text, Account.Text, Password.Text, colors[index], photo);
+
         // Go to main page
-        App.Enter(userAccount);
+        App.Enter(user?.Account);
 	}
 
     private void ToLogin(object sender, EventArgs e)
